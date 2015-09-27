@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     static private float padding = 0.5f;
     static private float repeatRate = 0.2f;
     public float projectileSpeed;
+    public float health = 200f;
     //Shooting spree
     public GameObject laser;
 	// Use this for initialization
@@ -35,7 +36,8 @@ public class PlayerController : MonoBehaviour
 	}
 	void Fire()
 	{
-		GameObject beam = Instantiate(laser,transform.position,Quaternion.identity) as GameObject;
+	    Vector3 offset = new Vector3(0,1,0);
+		GameObject beam = Instantiate(laser,transform.position+offset,Quaternion.identity) as GameObject;
 		beam.GetComponent<Rigidbody2D>().velocity = new Vector3(0,projectileSpeed);
 	}
 	// Update is called once per frame
@@ -50,5 +52,19 @@ public class PlayerController : MonoBehaviour
 		   CancelInvoke();
 		}
 	  movement();
+	}
+	void OnTriggerEnter2D(Collider2D col)
+	{
+		Projectile missile = col.gameObject.GetComponent<Projectile>();
+		if(missile)
+		{
+			missile.Hit();
+			this.health -= missile.getDamage();
+			Debug.Log ("Player health:"+this.health);
+			if(this.health <= 0)
+			{
+				Destroy (gameObject);
+			}
+		}
 	}
 }

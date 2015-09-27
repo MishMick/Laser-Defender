@@ -1,15 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemySpawner : MonoBehaviour {
+public class EnemySpawner : MonoBehaviour 
+{
+    //public var
     public GameObject enemyPrefab;
     public float width = 10f;
     public float height = 5f;
+    //private var
     private bool movingRight = true;
     private float speed = 5.0f;
 	private float leftEdgeOfFormation,rightEdgeOfFormation;
 	private Vector3 leftEdge,rightEdge;
 	private float xmin,xmax;
+	private float spawnDelay = 0.5f;
+	
+	Transform NextFreePosition(){
+		foreach(Transform childPositionGameObject in transform){
+			if (childPositionGameObject.childCount == 0){
+				return childPositionGameObject;
+			}
+		}
+		return null;
+	}
+	
+	
+	bool AllMembersDead(){
+		foreach(Transform childPositionGameObject in transform){
+			if (childPositionGameObject.childCount > 0){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	// Use this for initialization
 	void Start () 
 	{
@@ -18,16 +42,21 @@ public class EnemySpawner : MonoBehaviour {
 	rightEdge = Camera.main.ViewportToWorldPoint(new Vector3(1,0,CameraDistance));
 	xmin = leftEdge.x;
 	xmax = rightEdge.x;
-	
-	  foreach(Transform child in transform)
-	  {
-	   GameObject enemy = Instantiate(enemyPrefab,child.transform.position,Quaternion.identity) as GameObject;
-	   enemy.transform.parent = child;		
-	  }
+	SpawnUntilFull();
 	}
 	void OnDrawGizmos()
 	{
 	  Gizmos.DrawWireCube(transform.position,new Vector3(width,height,0));
+	}
+	void SpawnUntilFull(){
+		Transform freePosition = NextFreePosition();
+		if(freePosition){
+			GameObject enemy = Instantiate(enemyPrefab, freePosition.position, Quaternion.identity) as GameObject;
+			enemy.transform.parent = freePosition;
+		}
+		if(NextFreePosition()){
+			Invoke ("SpawnUntilFull", spawnDelay);
+		}
 	}
 	// Update is called once per frame
 	void Update () 
@@ -50,5 +79,11 @@ public class EnemySpawner : MonoBehaviour {
 		{
 		 movingRight = false;
 		}
+		if(AllMembersDead()){
+			Debug.Log("Empty Formation");
+			SpawnUntilFull();
+		}
 	}
+	
+	
 }
