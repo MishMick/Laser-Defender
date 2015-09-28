@@ -8,6 +8,12 @@ public class EnemyBehavior : MonoBehaviour
     private float health = 150f;
     private float projectileSpeed  = 10f;
     public float shotsPerSecond = 0.5f;
+	private ScoreKeeper scorekeeper;
+	
+    void Start()
+    {
+     scorekeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
+    }
     void Update()
     {
        float probability = Time.deltaTime *  shotsPerSecond;
@@ -26,6 +32,7 @@ public class EnemyBehavior : MonoBehaviour
 	  if(this.health <= 0)
 	  {
 	   Destroy (gameObject);
+	   scorekeeper.Score();
 	  }
 	 }
 	}

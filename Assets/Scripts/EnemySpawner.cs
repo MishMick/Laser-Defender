@@ -14,7 +14,6 @@ public class EnemySpawner : MonoBehaviour
 	private Vector3 leftEdge,rightEdge;
 	private float xmin,xmax;
 	private float spawnDelay = 0.5f;
-	
 	Transform NextFreePosition(){
 		foreach(Transform childPositionGameObject in transform){
 			if (childPositionGameObject.childCount == 0){
