@@ -83,16 +83,17 @@ public class PlayerController : MonoBehaviour
 				musicplayer.DestroyThis();
 				AudioSource.PlayClipAtPoint(die,transform.position,0.7f);
 				
-				if(lives > 0)
+				/*if(lives > 0)
 				{
 				 lives--;
+				 
 				 respawn();
 				}
 				else
-				{
+				{*/
 				 //show Game over scene to the user
-				 Application.LoadLevel("Lose Screen");
-				}
+				 Application.LoadLevel("Final Screen");
+				//}
 			}
 		}
 	}

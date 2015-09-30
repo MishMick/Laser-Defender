@@ -7,16 +7,18 @@ public class ScoreKeeper : MonoBehaviour {
     void Start()
     {
      myScore = GetComponent<Text>();
-     Reset();
     }
     public void Score()
     {
      score += 150;
 	 myScore.text = score.ToString();	
     }
-    public void Reset()
+    public string getScore()
+    {
+     return myScore.text;
+    }
+    public static void Reset()
     {
      score = 0;
-	 myScore.text = score.ToString();	
     }
 }
