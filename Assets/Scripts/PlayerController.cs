@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System;
 public class PlayerController : MonoBehaviour 
 {
     private float speed = 10.0f;
@@ -12,8 +12,11 @@ public class PlayerController : MonoBehaviour
     public float health = 200f;
     public AudioClip die;
     public MusicPlayer musicplayer;
+    public static int lives=3;
     //Shooting spree
     public GameObject laser;
+    public GameObject playerPrefab;
+	private float _elapsedTime = 0;
 	// Use this for initialization
 	void Start () 
 	{
@@ -37,6 +40,15 @@ public class PlayerController : MonoBehaviour
 		float newX = Mathf.Clamp(transform.position.x,xmin+padding,xmax-padding);
 		transform.position = new Vector3(newX,transform.position.y,transform.position.z);
 	}
+	
+	void respawn()
+	{	
+	 Debug.Log("Respawned!");
+	 GameObject player = Instantiate(playerPrefab,transform.position,Quaternion.identity) as GameObject;
+	 player.GetComponent<PlayerController>().enabled = true;
+	 player.GetComponent<PolygonCollider2D>().enabled = true;
+	 player.GetComponent<PlayerController>().health = 200f;
+	}
 	void Fire()
 	{
 	    Vector3 offset = new Vector3(0,1,0);
@@ -56,10 +68,11 @@ public class PlayerController : MonoBehaviour
 		}
 	  movement();
 	}
+	
 	void OnTriggerEnter2D(Collider2D col)
 	{
 		Projectile missile = col.gameObject.GetComponent<Projectile>();
-		if(missile)
+	if(missile)
 		{
 			missile.Hit();
 			this.health -= missile.getDamage();
@@ -69,6 +82,17 @@ public class PlayerController : MonoBehaviour
 				Destroy (gameObject);
 				musicplayer.DestroyThis();
 				AudioSource.PlayClipAtPoint(die,transform.position,0.7f);
+				
+				if(lives > 0)
+				{
+				 lives--;
+				 respawn();
+				}
+				else
+				{
+				 //show Game over scene to the user
+				 Application.LoadLevel("Lose Screen");
+				}
 			}
 		}
 	}
