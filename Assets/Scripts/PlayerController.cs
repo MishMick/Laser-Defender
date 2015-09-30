@@ -66,6 +66,24 @@ public class PlayerController : MonoBehaviour
 		{
 		   CancelInvoke();
 		}
+		
+		var tapCount = Input.touchCount;
+		for ( var i = 0 ; i < tapCount ; i++ ) {
+			//Do whatever you want with the current touch.
+			if(Input.GetTouch(0).phase == TouchPhase.Began)
+			{
+				Fire();
+			}
+			Vector2 touchDeltaPosition = Input.GetTouch(1).deltaPosition;
+			//Check if it is left or right?
+			if(touchDeltaPosition.x < 0.0f){
+				transform.Translate(Vector3.left * 10 * Time.deltaTime);
+			} else if (touchDeltaPosition.x > 0.0f) {
+				transform.Translate(Vector3.right * 10 * Time.deltaTime);
+			}
+		}
+		
+		
 	  movement();
 	}
 	
@@ -79,9 +97,10 @@ public class PlayerController : MonoBehaviour
 			//Debug.Log ("Player health:"+this.health);
 			if(this.health <= 0)
 			{
-				Destroy (gameObject);
-				musicplayer.DestroyThis();
 				AudioSource.PlayClipAtPoint(die,transform.position,0.7f);
+				
+				Destroy (gameObject);
+				//musicplayer.DestroyThis();
 				
 				/*if(lives > 0)
 				{
