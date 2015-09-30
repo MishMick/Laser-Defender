@@ -79,7 +79,7 @@ public class EnemySpawner : MonoBehaviour
 		 movingRight = false;
 		}
 		if(AllMembersDead()){
-			Debug.Log("Empty Formation");
+			//Debug.Log("Empty Formation");
 			SpawnUntilFull();
 		}
 	}

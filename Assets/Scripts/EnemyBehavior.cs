@@ -9,7 +9,7 @@ public class EnemyBehavior : MonoBehaviour
     private float projectileSpeed  = 10f;
     public float shotsPerSecond = 0.5f;
 	private ScoreKeeper scorekeeper;
-	
+	public AudioClip enemydown;
     void Start()
     {
      scorekeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
@@ -28,10 +28,11 @@ public class EnemyBehavior : MonoBehaviour
 	 {
 	  missile.Hit();
 	  this.health -= missile.getDamage();
-	  Debug.Log ("Enemy health:"+this.health);
+	  //Debug.Log ("Enemy health:"+this.health);
 	  if(this.health <= 0)
 	  {
 	   Destroy (gameObject);
+	   AudioSource.PlayClipAtPoint(enemydown,transform.position,0.7f);
 	   scorekeeper.Score();
 	  }
 	 }

@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour
     private float damage = 50f;
 	public void Hit()
 	{
-	 Debug.Log("Hit by projectile");
+	 //Debug.Log("Hit by projectile");
 	 Destroy(gameObject);
 	}
 	public float getDamage()

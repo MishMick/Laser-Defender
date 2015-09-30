@@ -10,11 +10,14 @@ public class PlayerController : MonoBehaviour
     static private float repeatRate = 0.2f;
     public float projectileSpeed;
     public float health = 200f;
+    public AudioClip die;
+    public MusicPlayer musicplayer;
     //Shooting spree
     public GameObject laser;
 	// Use this for initialization
 	void Start () 
 	{
+	  musicplayer = GameObject.FindObjectOfType<MusicPlayer>();
 	  CameraDistance = transform.position.z-Camera.main.transform.position.z;
 	  Vector3 leftmost = Camera.main.ViewportToWorldPoint(new Vector3(0,0,CameraDistance));
 	  Vector3 rightmost = Camera.main.ViewportToWorldPoint(new Vector3(1,0,CameraDistance));
@@ -60,10 +63,12 @@ public class PlayerController : MonoBehaviour
 		{
 			missile.Hit();
 			this.health -= missile.getDamage();
-			Debug.Log ("Player health:"+this.health);
+			//Debug.Log ("Player health:"+this.health);
 			if(this.health <= 0)
 			{
 				Destroy (gameObject);
+				musicplayer.DestroyThis();
+				AudioSource.PlayClipAtPoint(die,transform.position,0.7f);
 			}
 		}
 	}

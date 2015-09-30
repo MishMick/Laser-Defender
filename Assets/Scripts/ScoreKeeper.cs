@@ -11,7 +11,6 @@ public class ScoreKeeper : MonoBehaviour {
     }
     public void Score()
     {
-     Debug.Log ("Points scored!");
      score += 150;
 	 myScore.text = score.ToString();	
     }
